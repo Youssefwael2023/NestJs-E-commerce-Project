@@ -1,0 +1,16 @@
+* {
+    /* background-color: #171d20; */
+    font-family: 'Roboto', sans-serif;
+    color: #E0E0E0 !important;
+    font-weight: bold !important;
+}
+
+.alert {
+    color: #ffffff !important;
+    /* Ensure alert text is clear white */
+}
+
+:root {
+    --main-color: #b0b0b0;
+    --main-bg: #171d20;
+}

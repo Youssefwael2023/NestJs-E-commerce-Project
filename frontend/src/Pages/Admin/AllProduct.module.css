@@ -1,0 +1,15 @@
+::placeholder {
+    color: var(--main-color) !important;
+}
+
+.inputt {
+    color: var(--main-color) !important;
+    background-color: var(--main-bg) !important;
+    border: none !important;
+    font-size: 20px !important;
+}
+
+.alert {
+    color: #ffffff !important;
+    /* Ensure alert text is clear white */
+}

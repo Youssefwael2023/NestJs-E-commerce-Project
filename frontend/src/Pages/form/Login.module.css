@@ -1,0 +1,186 @@
+body {
+    /* background: #12506f ; */
+    font-family: 'Roboto', sans-serif;
+}
+
+.loginbox {
+    /* margin-top: 75px; */
+    height: 70vh;
+    background: #121212;
+    text-align: center;
+    box-shadow: 0px 0px 25px #b0b0b0, 6px 3px 6px rgba(0, 0, 0, 0.23);
+    position: relative;
+    top: 150px;
+    padding: 10px 20px 0px 20px !important;
+}
+
+
+
+
+
+.logintitle {
+    text-align: center;
+    font-size: 40px !important;
+    letter-spacing: 2px;
+    margin-top: 15px;
+    font-weight: bolder !important;
+    color: #ECF0F5;
+    position: relative;
+    bottom: 0px;
+}
+
+.logintitle::after {
+    content: '';
+    width: 90px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: #b0b0b0;
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+form {
+    position: relative;
+    top: 50px;
+
+}
+
+
+
+.loginform {
+    text-align: left;
+
+}
+
+.input[type=text],
+.input[type=email],
+.input[type=password] {
+    background-color: white;
+    border: none;
+    border-bottom: 8px solid #b0b0b0 !important;
+    border-top: 0px;
+    border-radius: 0px;
+    font-weight: bold;
+    outline: 0;
+    margin-bottom: 20px;
+    padding-left: 0px;
+    color: #19314e !important;
+    padding: 10px !important;
+    width: 50%;
+    margin: 0 auto;
+    position: relative;
+    left: 20px;
+}
+
+
+
+.formgroup {
+    margin-bottom: 10px;
+    outline: 0px;
+    font-size: 30px;
+}
+
+.formcontrol:focus {
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-bottom: 2px solid #b0b0b0 !important;
+    outline: 0;
+    background-color: #1A2226;
+    color: #2b4e79;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0;
+}
+
+label {
+    margin-bottom: 0px;
+    position: relative;
+    top: 40px;
+    color: #ECF0F5;
+}
+
+.formcontrollabel {
+    font-size: 10px;
+    color: #6C6C6C;
+    font-weight: bold;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+.btnoutlineprimary {
+    border-color: #b0b0b0 !important;
+    background-color: #b0b0b0 !important;
+    color: #b0b0b0;
+    border-radius: 0px;
+    padding: 15px 35px !important;
+    font-weight: bold !important;
+    letter-spacing: 1px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
+    border: 5px solid #b0b0b0 !important;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white !important;
+    font-size: 20px !important;
+
+    transition: all 0.5s ease !important;
+
+}
+
+.btnoutlineprimary:hover {
+    background-color: #7a9eb0;
+    padding: 20px 50px !important;
+    box-shadow: 0 1px 3px rgba(85, 49, 135, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    /* right: 0px; */
+}
+
+
+.loginbutton {
+    /* padding-right: 0px; */
+    text-align: center;
+
+    /* margin-bottom: 25px; */
+}
+
+.logintext {
+    text-align: left;
+    padding-left: 0px;
+    color: #a3a2a4;
+}
+
+.loginbttm {
+    padding: 0px;
+    position: relative;
+    top: 50px;
+
+}
+
+.alert {
+    color: #ffffff !important;
+    /* Ensure alert text is clear white */
+}
+
+@media (max-width: 768px) {
+    .loginbox {
+        width: 80% !important;
+        margin: 0 auto;
+        top: 150px;
+    }
+
+    .input[type=text],
+    .input[type=email],
+    .input[type=password] {
+        width: 100%;
+        left: 0px;
+        top: 50px;
+    }
+
+
+
+
+}
