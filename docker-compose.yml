@@ -1,0 +1,153 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: al-masrya-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: ecommerce
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+      dockerfile: Dockerfile
+    container_name: al-masrya-api-gateway
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/ecommerce
+      NODE_ENV: production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      auth-microservice:
+        condition: service_started
+      product-microservice:
+        condition: service_started
+      review-microservice:
+        condition: service_started
+      order-microservice:
+        condition: service_started
+      cart-microservice:
+        condition: service_started
+      chatbot-microservice:
+        condition: service_started
+
+  auth-microservice:
+    build:
+      context: ./backend/auth-microservice
+      dockerfile: Dockerfile
+    container_name: al-masrya-auth-service
+    restart: always
+    ports:
+      - "4001:4001"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/ecommerce
+      NODE_ENV: production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  product-microservice:
+    build:
+      context: ./backend/product-microservice
+      dockerfile: Dockerfile
+    container_name: al-masrya-product-service
+    restart: always
+    ports:
+      - "4002:4002"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/ecommerce
+      NODE_ENV: production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  cart-microservice:
+    build:
+      context: ./backend/cart-microservice
+      dockerfile: Dockerfile
+    container_name: al-masrya-cart-service
+    restart: always
+    ports:
+      - "4003:4003"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/ecommerce
+      NODE_ENV: production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  order-microservice:
+    build:
+      context: ./backend/order-microservice
+      dockerfile: Dockerfile
+    container_name: al-masrya-order-service
+    restart: always
+    ports:
+      - "4004:4004"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/ecommerce
+      NODE_ENV: production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  chatbot-microservice:
+    build:
+      context: ./backend/chatbot-microservice
+      dockerfile: Dockerfile
+    container_name: al-masrya-chatbot-service
+    restart: always
+    ports:
+      - "4005:4005"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/ecommerce
+      NODE_ENV: production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  review-microservice:
+    build:
+      context: ./backend/review-microservice
+      dockerfile: Dockerfile
+    container_name: al-masrya-review-service
+    restart: always
+    ports:
+      - "4006:4006"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/ecommerce
+      NODE_ENV: production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: al-masrya-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - api-gateway
+
+volumes:
+  mongodb_data:
+
+networks:
+  default:
+    name: al-masrya-network

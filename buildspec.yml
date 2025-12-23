@@ -1,0 +1,71 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/al-masrya
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - echo Building Docker images...
+
+  build:
+    commands:
+      - echo Building API Gateway image...
+      - docker build -f backend/api-gateway/Dockerfile -t $REPOSITORY_URI:api-gateway-$IMAGE_TAG ./backend/api-gateway
+      - docker tag $REPOSITORY_URI:api-gateway-$IMAGE_TAG $REPOSITORY_URI:api-gateway-latest
+      
+      - echo Building Review Service image...
+      - docker build -f backend/review-microservice/Dockerfile -t $REPOSITORY_URI:review-$IMAGE_TAG ./backend/review-microservice
+      - docker tag $REPOSITORY_URI:review-$IMAGE_TAG $REPOSITORY_URI:review-latest
+      
+      - echo Building Auth Service image...
+      - docker build -f backend/auth-microservice/Dockerfile -t $REPOSITORY_URI:auth-$IMAGE_TAG ./backend/auth-microservice
+      - docker tag $REPOSITORY_URI:auth-$IMAGE_TAG $REPOSITORY_URI:auth-latest
+      
+      - echo Building Product Service image...
+      - docker build -f backend/product-microservice/Dockerfile -t $REPOSITORY_URI:product-$IMAGE_TAG ./backend/product-microservice
+      - docker tag $REPOSITORY_URI:product-$IMAGE_TAG $REPOSITORY_URI:product-latest
+      
+      - echo Building Order Service image...
+      - docker build -f backend/order-microservice/Dockerfile -t $REPOSITORY_URI:order-$IMAGE_TAG ./backend/order-microservice
+      - docker tag $REPOSITORY_URI:order-$IMAGE_TAG $REPOSITORY_URI:order-latest
+      
+      - echo Building Cart Service image...
+      - docker build -f backend/cart-microservice/Dockerfile -t $REPOSITORY_URI:cart-$IMAGE_TAG ./backend/cart-microservice
+      - docker tag $REPOSITORY_URI:cart-$IMAGE_TAG $REPOSITORY_URI:cart-latest
+      
+      - echo Building Chatbot Service image...
+      - docker build -f backend/chatbot-microservice/Dockerfile -t $REPOSITORY_URI:chatbot-$IMAGE_TAG ./backend/chatbot-microservice
+      - docker tag $REPOSITORY_URI:chatbot-$IMAGE_TAG $REPOSITORY_URI:chatbot-latest
+      
+      - echo Building Frontend image...
+      - docker build -f frontend/Dockerfile -t $REPOSITORY_URI:frontend-$IMAGE_TAG ./frontend
+      - docker tag $REPOSITORY_URI:frontend-$IMAGE_TAG $REPOSITORY_URI:frontend-latest
+
+  post_build:
+    commands:
+      - echo Pushing images to ECR...
+      - docker push $REPOSITORY_URI:api-gateway-$IMAGE_TAG
+      - docker push $REPOSITORY_URI:api-gateway-latest
+      - docker push $REPOSITORY_URI:review-$IMAGE_TAG
+      - docker push $REPOSITORY_URI:review-latest
+      - docker push $REPOSITORY_URI:auth-$IMAGE_TAG
+      - docker push $REPOSITORY_URI:auth-latest
+      - docker push $REPOSITORY_URI:product-$IMAGE_TAG
+      - docker push $REPOSITORY_URI:product-latest
+      - docker push $REPOSITORY_URI:order-$IMAGE_TAG
+      - docker push $REPOSITORY_URI:order-latest
+      - docker push $REPOSITORY_URI:cart-$IMAGE_TAG
+      - docker push $REPOSITORY_URI:cart-latest
+      - docker push $REPOSITORY_URI:chatbot-$IMAGE_TAG
+      - docker push $REPOSITORY_URI:chatbot-latest
+      - docker push $REPOSITORY_URI:frontend-$IMAGE_TAG
+      - docker push $REPOSITORY_URI:frontend-latest
+      - echo "Updating ECS task definitions..."
+      - printf '[{"name":"api-gateway","imageUri":"%s"}]' $REPOSITORY_URI:api-gateway-$IMAGE_TAG > imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
